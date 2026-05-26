@@ -1,0 +1,10 @@
+allowBuilds:
+  esbuild: true
+  lightningcss: true
+minimumReleaseAgeExclude:
+  - '@tanstack/react-start-client@1.168.20'
+  - '@tanstack/react-start-server@1.167.27'
+  - '@tanstack/router-core@1.171.19'
+  - '@tanstack/router-generator@1.167.25'
+  - '@tanstack/start-server-core@1.169.22'
+  - '@tanstack/start-storage-context@1.167.21'
