@@ -1,6 +1,6 @@
 import { pgTable, uuid, boolean, timestamp, unique } from "drizzle-orm/pg-core";
-import { users } from "./users.js";
-import { lessons } from "./lessons.js";
+import { lessons } from "#db/schema/lessons.js";
+import { users } from "#db/schema/users.js";
 import z from "zod";
 
 export const progress = pgTable(

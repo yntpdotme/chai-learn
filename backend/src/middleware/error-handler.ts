@@ -2,7 +2,7 @@
 import type { ErrorHandler, NotFoundHandler } from "hono";
 import { HTTPException } from "hono/http-exception";
 import { ZodError } from "zod";
-import { isProd } from "../env.js";
+import { isProd } from "#env.js";
 
 export const errorHandler: ErrorHandler = (err, c) => {
 	// Errors we threw on purpose (404, 400, etc.) — trust the status/message.

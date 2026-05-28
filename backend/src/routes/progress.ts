@@ -4,13 +4,13 @@ import { zValidator } from "@hono/zod-validator";
 import { and, eq } from "drizzle-orm";
 import { HTTPException } from "hono/http-exception";
 
-import { db } from "../db/index.js";
+import { db } from "#db/index.js";
 import {
 	lessons,
 	progress,
-	users,
 	upsertProgressSchema,
-} from "../db/schema/index.js";
+	users,
+} from "#db/schema/index.js";
 
 export const progressRoute = new Hono();
 

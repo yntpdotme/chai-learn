@@ -1,5 +1,5 @@
-import { db } from "../index.js";
-import { users } from "../schema/users.js";
+import { db } from "#db/index.js";
+import { users } from "#db/schema/users.js";
 
 export async function seedUsers() {
 	await db
