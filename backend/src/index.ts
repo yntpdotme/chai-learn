@@ -1,10 +1,13 @@
 // Path: apps/backend/src/index.ts
+import "dotenv/config";
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 
 import { env } from "#env.js";
+import { auth } from "#lib/auth.js";
 import {
+	attachSession,
 	errorHandler,
 	notFoundHandler,
 	requestLogger,
@@ -13,22 +16,36 @@ import {
 	coursesRoute,
 	healthRoute,
 	lessonsRoute,
+	meRoute,
 	progressRoute,
 } from "#routes/index.js";
+import type { AppVariables } from "#types.js";
 
-const app = new Hono();
+const app = new Hono<{ Variables: AppVariables }>();
 
 app.use("*", requestLogger);
-app.use("*", cors()); // tighten origin allowlist once the frontend URL is fixed (Phase 6/7)
+app.use(
+	"*",
+	cors({
+		origin: env.FRONTEND_URL, // must be an exact origin (not "*") for cookie-based sessions
+		credentials: true,
+	}),
+);
+app.use("*", attachSession);
+
+// Better Auth owns this whole path — handles register, login, logout,
+// session, and current-user internally. Nothing else to build for those.
+app.on(["POST", "GET"], "/api/auth/**", (c) => auth.handler(c.req.raw));
 
 app.route("/api/health", healthRoute);
 app.route("/api/courses", coursesRoute);
 app.route("/api/lessons", lessonsRoute);
 app.route("/api/progress", progressRoute);
+app.route("/api/me", meRoute);
 
 app.onError(errorHandler);
 app.notFound(notFoundHandler);
 
 serve({ fetch: app.fetch, port: env.PORT }, (info) => {
-	console.log(`Chai-Learn API running at http://localhost:${info.port}`);
+	console.log(`🚀 ChaiLearn API running at http://localhost:${info.port}`);
 });

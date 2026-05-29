@@ -1,33 +1,26 @@
-// Path: apps/backend/src/routes/progress.ts
-import { Hono } from "hono";
+// Path: src/routes/progress.ts
 import { zValidator } from "@hono/zod-validator";
 import { and, eq } from "drizzle-orm";
+import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
-
+import { lessons, progress, upsertProgressSchema } from "#/db/schema/index.js";
 import { db } from "#db/index.js";
-import {
-	lessons,
-	progress,
-	upsertProgressSchema,
-	users,
-} from "#db/schema/index.js";
+import { requireAuth } from "#middleware/auth.js";
+import type { AppVariables } from "#types.js";
 
-export const progressRoute = new Hono();
+export const progressRoute = new Hono<{ Variables: AppVariables }>();
+
+progressRoute.use("*", requireAuth);
 
 // POST /api/progress
-// Upserts progress for a (user, lesson) pair — relies on the unique
-// constraint already defined in the progress schema. No auth yet
-// (that's Phase 4), so userId is trusted from the body for now.
+// Upserts progress for the logged-in user + a given lesson — relies on
+// the unique constraint already defined in the progress schema.
+// userId now comes from the session, not the request body, so one
+// user can no longer write progress on another user's behalf.
 progressRoute.post("/", zValidator("json", upsertProgressSchema), async (c) => {
-	const { userId, lessonId, completed } = c.req.valid("json");
-
-	const [user] = await db
-		.select({ id: users.id })
-		.from(users)
-		.where(eq(users.id, userId));
-	if (!user) {
-		throw new HTTPException(404, { message: `User ${userId} not found` });
-	}
+	const user = c.get("user")!;
+	const userId = user.id;
+	const { lessonId, completed } = c.req.valid("json");
 
 	const [lesson] = await db
 		.select({ id: lessons.id })
