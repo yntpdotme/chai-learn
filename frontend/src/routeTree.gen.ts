@@ -10,33 +10,186 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthRouteRouteImport } from './routes/_auth/route'
+import { Route as PublicRouteRouteImport } from './routes/_public/route'
+import { Route as AdminRouteRouteImport } from './routes/admin/route'
+import { Route as AuthLoginRouteImport } from './routes/_auth/login'
+import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
+import { Route as PublicCoursesRouteImport } from './routes/_public/courses'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminCoursesIndexRouteImport } from './routes/admin/courses/index'
+import { Route as AdminCoursesCourseIdRouteRouteImport } from './routes/admin/courses/$courseId/route'
+import { Route as AdminCoursesNewRouteImport } from './routes/admin/courses/new'
+import { Route as AdminCoursesCourseIdIndexRouteImport } from './routes/admin/courses/$courseId/index'
+import { Route as AdminCoursesCourseIdEditRouteImport } from './routes/admin/courses/$courseId/edit'
+import { Route as AdminCoursesCourseIdLessonsNewRouteImport } from './routes/admin/courses/$courseId/lessons/new'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRouteRoute = AuthRouteRouteImport.update({
+  id: '/_auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PublicRouteRoute = PublicRouteRouteImport.update({
+  id: '/_public',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRouteRoute = AdminRouteRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthLoginRoute = AuthLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const AuthSignupRoute = AuthSignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const PublicCoursesRoute = PublicCoursesRouteImport.update({
+  id: '/courses',
+  path: '/courses',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminCoursesIndexRoute = AdminCoursesIndexRouteImport.update({
+  id: '/courses/',
+  path: '/courses/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminCoursesCourseIdRouteRoute =
+  AdminCoursesCourseIdRouteRouteImport.update({
+    id: '/courses/$courseId',
+    path: '/courses/$courseId',
+    getParentRoute: () => AdminRouteRoute,
+  } as any)
+const AdminCoursesNewRoute = AdminCoursesNewRouteImport.update({
+  id: '/courses/new',
+  path: '/courses/new',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminCoursesCourseIdIndexRoute =
+  AdminCoursesCourseIdIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AdminCoursesCourseIdRouteRoute,
+  } as any)
+const AdminCoursesCourseIdEditRoute =
+  AdminCoursesCourseIdEditRouteImport.update({
+    id: '/edit',
+    path: '/edit',
+    getParentRoute: () => AdminCoursesCourseIdRouteRoute,
+  } as any)
+const AdminCoursesCourseIdLessonsNewRoute =
+  AdminCoursesCourseIdLessonsNewRouteImport.update({
+    id: '/lessons/new',
+    path: '/lessons/new',
+    getParentRoute: () => AdminCoursesCourseIdRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteRouteWithChildren
+  '/login': typeof AuthLoginRoute
+  '/signup': typeof AuthSignupRoute
+  '/courses': typeof PublicCoursesRoute
+  '/admin/': typeof AdminIndexRoute
+  '/admin/courses/$courseId': typeof AdminCoursesCourseIdRouteRouteWithChildren
+  '/admin/courses/new': typeof AdminCoursesNewRoute
+  '/admin/courses/': typeof AdminCoursesIndexRoute
+  '/admin/courses/$courseId/edit': typeof AdminCoursesCourseIdEditRoute
+  '/admin/courses/$courseId/': typeof AdminCoursesCourseIdIndexRoute
+  '/admin/courses/$courseId/lessons/new': typeof AdminCoursesCourseIdLessonsNewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/login': typeof AuthLoginRoute
+  '/signup': typeof AuthSignupRoute
+  '/courses': typeof PublicCoursesRoute
+  '/admin': typeof AdminIndexRoute
+  '/admin/courses/new': typeof AdminCoursesNewRoute
+  '/admin/courses': typeof AdminCoursesIndexRoute
+  '/admin/courses/$courseId/edit': typeof AdminCoursesCourseIdEditRoute
+  '/admin/courses/$courseId': typeof AdminCoursesCourseIdIndexRoute
+  '/admin/courses/$courseId/lessons/new': typeof AdminCoursesCourseIdLessonsNewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_auth': typeof AuthRouteRouteWithChildren
+  '/_public': typeof PublicRouteRouteWithChildren
+  '/admin': typeof AdminRouteRouteWithChildren
+  '/_auth/login': typeof AuthLoginRoute
+  '/_auth/signup': typeof AuthSignupRoute
+  '/_public/courses': typeof PublicCoursesRoute
+  '/admin/': typeof AdminIndexRoute
+  '/admin/courses/$courseId': typeof AdminCoursesCourseIdRouteRouteWithChildren
+  '/admin/courses/new': typeof AdminCoursesNewRoute
+  '/admin/courses/': typeof AdminCoursesIndexRoute
+  '/admin/courses/$courseId/edit': typeof AdminCoursesCourseIdEditRoute
+  '/admin/courses/$courseId/': typeof AdminCoursesCourseIdIndexRoute
+  '/admin/courses/$courseId/lessons/new': typeof AdminCoursesCourseIdLessonsNewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/signup'
+    | '/courses'
+    | '/admin/'
+    | '/admin/courses/$courseId'
+    | '/admin/courses/new'
+    | '/admin/courses/'
+    | '/admin/courses/$courseId/edit'
+    | '/admin/courses/$courseId/'
+    | '/admin/courses/$courseId/lessons/new'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/login'
+    | '/signup'
+    | '/courses'
+    | '/admin'
+    | '/admin/courses/new'
+    | '/admin/courses'
+    | '/admin/courses/$courseId/edit'
+    | '/admin/courses/$courseId'
+    | '/admin/courses/$courseId/lessons/new'
+  id:
+    | '__root__'
+    | '/'
+    | '/_auth'
+    | '/_public'
+    | '/admin'
+    | '/_auth/login'
+    | '/_auth/signup'
+    | '/_public/courses'
+    | '/admin/'
+    | '/admin/courses/$courseId'
+    | '/admin/courses/new'
+    | '/admin/courses/'
+    | '/admin/courses/$courseId/edit'
+    | '/admin/courses/$courseId/'
+    | '/admin/courses/$courseId/lessons/new'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRouteRoute: typeof AuthRouteRouteWithChildren
+  PublicRouteRoute: typeof PublicRouteRouteWithChildren
+  AdminRouteRoute: typeof AdminRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +201,167 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_public': {
+      id: '/_public'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof PublicRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_auth/login': {
+      id: '/_auth/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/_auth/signup': {
+      id: '/_auth/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof AuthSignupRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/_public/courses': {
+      id: '/_public/courses'
+      path: '/courses'
+      fullPath: '/courses'
+      preLoaderRoute: typeof PublicCoursesRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/courses/': {
+      id: '/admin/courses/'
+      path: '/courses'
+      fullPath: '/admin/courses/'
+      preLoaderRoute: typeof AdminCoursesIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/courses/$courseId': {
+      id: '/admin/courses/$courseId'
+      path: '/courses/$courseId'
+      fullPath: '/admin/courses/$courseId'
+      preLoaderRoute: typeof AdminCoursesCourseIdRouteRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/courses/new': {
+      id: '/admin/courses/new'
+      path: '/courses/new'
+      fullPath: '/admin/courses/new'
+      preLoaderRoute: typeof AdminCoursesNewRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/courses/$courseId/': {
+      id: '/admin/courses/$courseId/'
+      path: '/'
+      fullPath: '/admin/courses/$courseId/'
+      preLoaderRoute: typeof AdminCoursesCourseIdIndexRouteImport
+      parentRoute: typeof AdminCoursesCourseIdRouteRoute
+    }
+    '/admin/courses/$courseId/edit': {
+      id: '/admin/courses/$courseId/edit'
+      path: '/edit'
+      fullPath: '/admin/courses/$courseId/edit'
+      preLoaderRoute: typeof AdminCoursesCourseIdEditRouteImport
+      parentRoute: typeof AdminCoursesCourseIdRouteRoute
+    }
+    '/admin/courses/$courseId/lessons/new': {
+      id: '/admin/courses/$courseId/lessons/new'
+      path: '/lessons/new'
+      fullPath: '/admin/courses/$courseId/lessons/new'
+      preLoaderRoute: typeof AdminCoursesCourseIdLessonsNewRouteImport
+      parentRoute: typeof AdminCoursesCourseIdRouteRoute
+    }
   }
 }
 
+interface AuthRouteRouteChildren {
+  AuthLoginRoute: typeof AuthLoginRoute
+  AuthSignupRoute: typeof AuthSignupRoute
+}
+
+const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthLoginRoute: AuthLoginRoute,
+  AuthSignupRoute: AuthSignupRoute,
+}
+
+const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
+  AuthRouteRouteChildren,
+)
+
+interface PublicRouteRouteChildren {
+  PublicCoursesRoute: typeof PublicCoursesRoute
+}
+
+const PublicRouteRouteChildren: PublicRouteRouteChildren = {
+  PublicCoursesRoute: PublicCoursesRoute,
+}
+
+const PublicRouteRouteWithChildren = PublicRouteRoute._addFileChildren(
+  PublicRouteRouteChildren,
+)
+
+interface AdminCoursesCourseIdRouteRouteChildren {
+  AdminCoursesCourseIdEditRoute: typeof AdminCoursesCourseIdEditRoute
+  AdminCoursesCourseIdIndexRoute: typeof AdminCoursesCourseIdIndexRoute
+  AdminCoursesCourseIdLessonsNewRoute: typeof AdminCoursesCourseIdLessonsNewRoute
+}
+
+const AdminCoursesCourseIdRouteRouteChildren: AdminCoursesCourseIdRouteRouteChildren =
+  {
+    AdminCoursesCourseIdEditRoute: AdminCoursesCourseIdEditRoute,
+    AdminCoursesCourseIdIndexRoute: AdminCoursesCourseIdIndexRoute,
+    AdminCoursesCourseIdLessonsNewRoute: AdminCoursesCourseIdLessonsNewRoute,
+  }
+
+const AdminCoursesCourseIdRouteRouteWithChildren =
+  AdminCoursesCourseIdRouteRoute._addFileChildren(
+    AdminCoursesCourseIdRouteRouteChildren,
+  )
+
+interface AdminRouteRouteChildren {
+  AdminIndexRoute: typeof AdminIndexRoute
+  AdminCoursesCourseIdRouteRoute: typeof AdminCoursesCourseIdRouteRouteWithChildren
+  AdminCoursesNewRoute: typeof AdminCoursesNewRoute
+  AdminCoursesIndexRoute: typeof AdminCoursesIndexRoute
+}
+
+const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminIndexRoute: AdminIndexRoute,
+  AdminCoursesCourseIdRouteRoute: AdminCoursesCourseIdRouteRouteWithChildren,
+  AdminCoursesNewRoute: AdminCoursesNewRoute,
+  AdminCoursesIndexRoute: AdminCoursesIndexRoute,
+}
+
+const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
+  AdminRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRouteRoute: AuthRouteRouteWithChildren,
+  PublicRouteRoute: PublicRouteRouteWithChildren,
+  AdminRouteRoute: AdminRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
