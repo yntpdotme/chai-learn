@@ -15,11 +15,12 @@
     "lint": "biome lint",
     "check": "biome check",
     "test": "vitest",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
-    "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio",
-    "db:seed": "NODE_OPTIONS='--conditions=development' tsx src/db/seed/index.ts"
+    "db:generate": "NODE_OPTIONS='--conditions=development' drizzle-kit generate",
+    "db:migrate": "NODE_OPTIONS='--conditions=development' drizzle-kit migrate",
+    "db:push": "NODE_OPTIONS='--conditions=development' drizzle-kit push",
+    "db:studio": "NODE_OPTIONS='--conditions=development' drizzle-kit studio",
+    "db:seed": "NODE_OPTIONS='--conditions=development' tsx src/db/seed/index.ts",
+    "db:migrate:prod": "drizzle-kit migrate"
   },
   "dependencies": {
     "@hono/node-server": "^2.1.0",
