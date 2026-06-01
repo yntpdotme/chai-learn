@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
-import { Button } from "#/components/ui/button";
-import ThemeToggle from "./theme-toggle";
 import { LibraryBigIcon } from "lucide-react";
+import { buttonVariants } from "#/components/ui/button";
+import ThemeToggle from "./theme-toggle";
 
 const links = [
 	{ to: "/admin", label: "Dashboard" },
@@ -21,14 +21,14 @@ export function AdminNav() {
 
 			<nav className="flex flex-1 items-center justify-end gap-1">
 				{links.map((l) => (
-					<Button
+					<Link
 						key={l.to}
-						variant="ghost"
-						size="sm"
-						render={<Link to={l.to} />}
+						to={l.to}
+						activeProps={{ className: "bg-accent" }}
+						className={buttonVariants({ variant: "ghost", size: "sm" })}
 					>
 						{l.label}
-					</Button>
+					</Link>
 				))}
 			</nav>
 			<ThemeToggle variant="minimal" />

@@ -47,15 +47,15 @@ export default function ThemeToggle({ variant = "default" }: ThemeToggleProps) {
 		>
 			{mode === "auto" ? (
 				<LaptopMinimal
-					className={cn("size-5", variant === "minimal" && "text-white")}
+					className={cn("size-5", variant === "minimal" && "text-foreground")}
 				/>
 			) : mode === "dark" ? (
 				<MoonIcon
-					className={cn("size-4", variant === "minimal" && "text-white")}
+					className={cn("size-4", variant === "minimal" && "text-foreground")}
 				/>
 			) : (
 				<SunIcon
-					className={cn("size-4", variant === "minimal" && "")}
+					className={cn("size-4", variant === "minimal" && "text-foreground")}
 				/>
 			)}
 		</Button>

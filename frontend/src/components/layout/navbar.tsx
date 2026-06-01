@@ -1,23 +1,42 @@
-import { Link } from "@tanstack/react-router";
-import { LibraryBigIcon } from "lucide-react";
-import { Button } from "#/components/ui/button";
+import { Link, useRouteContext } from "@tanstack/react-router";
+import { GraduationCap } from "lucide-react";
+import { Button, buttonVariants } from "#/components/ui/button";
 import ThemeToggle from "./theme-toggle";
 
 export function Navbar() {
+	const { user } = useRouteContext({ from: "__root__" });
+
 	return (
-		<header className="">
-			<div className="mx-auto flex h-16 items-center justify-between">
-				<Link
-					to="/"
-					className="flex items-center gap-2 font-medium font-montserrat tracking-tighter"
-				>
-					<LibraryBigIcon className="size-5 text-primary" />
-					Chai aur Learn
+		<header className="border-b border-dashed">
+			<div className="mx-auto flex h-16 items-center justify-between px-4">
+				<Link to="/" className="flex items-center gap-2 font-semibold">
+					<GraduationCap className="size-5 text-primary" />
+					ChaiLearn
 				</Link>
 
-				<nav className="flex items-center gap-x-3.5">
+				<nav className="flex items-center gap-2">
 					<ThemeToggle variant="minimal" />
-					<Button render={<Link to="/login" />}>Login</Button>
+					{user ? (
+						user.role === "admin" ? (
+							<Button
+								className={buttonVariants({ variant: "outline" })}
+								render={<Link to="/admin" />}
+							>
+								Admin
+							</Button>
+						) : (
+							<Button
+								className={buttonVariants({ variant: "outline" })}
+								disabled
+							>
+								{user.name}
+							</Button>
+						)
+					) : (
+						<Link to="/login" className={buttonVariants({variant: "default"})}>
+							Login
+						</Link>
+					)}
 				</nav>
 			</div>
 		</header>

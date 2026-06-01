@@ -1,6 +1,6 @@
 // Path: /src/routes/lessons.ts
-import { Hono } from "hono";
 import { eq } from "drizzle-orm";
+import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
 
 import { db } from "#db/index.js";
