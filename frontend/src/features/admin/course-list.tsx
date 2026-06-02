@@ -1,13 +1,12 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Plus, Search } from "lucide-react";
-import { useEffect, useState } from "react";
+
 import { Button } from "#/components/ui/button";
 import {
 	InputGroup,
 	InputGroupAddon,
 	InputGroupInput,
 } from "#/components/ui/input-group";
-import { Kbd } from "#/components/ui/kbd";
 import {
 	Table,
 	TableBody,
@@ -16,15 +15,10 @@ import {
 	TableHeader,
 	TableRow,
 } from "#/components/ui/table";
-import { mockCourses } from "./mock-data";
+import type { Course } from "#/lib/api";
 
-export function CourseList() {
+export function CourseList({ courses }: { courses: Course[] }) {
 	const navigate = useNavigate();
-	const [isMac, setIsMac] = useState(true);
-
-	useEffect(() => {
-		setIsMac(/Mac|iPhone|iPad|iPod/.test(navigator.userAgent));
-	}, []);
 
 	return (
 		<div>
@@ -43,29 +37,27 @@ export function CourseList() {
 
 			<div className="relative mt-6 max-w-sm">
 				<InputGroup className="mb-0.5 max-w-md">
-					<InputGroupInput placeholder="Search your people..." />
-
+					<InputGroupInput placeholder="Search courses..." />
 					<InputGroupAddon>
 						<Search className="size-4 text-muted-foreground" />
-					</InputGroupAddon>
-
-					<InputGroupAddon align="inline-end" className="max-sm:hidden">
-						<Kbd>{isMac ? "⌘K" : "⌃K"}</Kbd>
 					</InputGroupAddon>
 				</InputGroup>
 			</div>
 
-			<Table className="mt-4">
-				<TableHeader>
-					<TableRow>
-						<TableHead>Course</TableHead>
-						<TableHead>Lessons</TableHead>
-						<TableHead>Created</TableHead>
-					</TableRow>
-				</TableHeader>
-				<TableBody>
-					{mockCourses.map((course) => {
-						return (
+			{courses.length === 0 ? (
+				<p className="mt-6 text-sm text-muted-foreground">
+					No courses yet — create your first one.
+				</p>
+			) : (
+				<Table className="mt-4">
+					<TableHeader>
+						<TableRow>
+							<TableHead>Course</TableHead>
+							<TableHead>Created</TableHead>
+						</TableRow>
+					</TableHeader>
+					<TableBody>
+						{courses.map((course) => (
 							<TableRow
 								key={course.id}
 								tabIndex={0}
@@ -89,15 +81,14 @@ export function CourseList() {
 									<span className="font-medium">{course.title}</span>
 									<p className="text-sm text-muted-foreground">{course.slug}</p>
 								</TableCell>
-								<TableCell>{course.lessons.length}</TableCell>
 								<TableCell className="text-muted-foreground">
-									{course.createdAt}
+									{new Date(course.createdAt).toLocaleDateString()}
 								</TableCell>
 							</TableRow>
-						);
-					})}
-				</TableBody>
-			</Table>
+						))}
+					</TableBody>
+				</Table>
+			)}
 		</div>
 	);
 }

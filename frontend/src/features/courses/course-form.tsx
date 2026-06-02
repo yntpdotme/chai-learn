@@ -6,6 +6,7 @@ import { Button } from "#/components/ui/button";
 import { FormItem, FormLabel, FormMessage } from "#/components/ui/form-fields";
 import { Input } from "#/components/ui/input";
 import { Textarea } from "#/components/ui/textarea";
+import type { Course } from "#/lib/api";
 
 const courseSchema = z.object({
 	title: z.string().min(2, "Title must be at least 2 characters"),
@@ -35,7 +36,7 @@ export function CourseForm({
 	onSubmit,
 	submitLabel = "Save course",
 }: {
-	defaultValues?: Partial<CourseFormValues>;
+	defaultValues?: Partial<Pick<Course, "title" | "slug" | "description">>;
 	onSubmit: (value: CourseFormValues) => void | Promise<void>;
 	submitLabel?: string;
 }) {

@@ -1,11 +1,11 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
-
-import { mockCourses } from "#/features/admin/mock-data";
+import { api } from "#/lib/api";
 
 export const Route = createFileRoute("/admin/courses/$courseId")({
+	loader: ({ params }) => api.courses.get(params.courseId),
 	staticData: {
-		breadcrumb: ({ params }) =>
-			mockCourses.find((c) => c.id === params.courseId)?.title ?? "Course",
+		breadcrumb: ({ loaderData }) =>
+			(loaderData as { title?: string } | undefined)?.title ?? "Course",
 	},
 	component: () => <Outlet />,
 });

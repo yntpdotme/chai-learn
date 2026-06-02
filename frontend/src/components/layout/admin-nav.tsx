@@ -19,12 +19,11 @@ export function AdminNav() {
 				Chai aur Learn
 			</Link>
 
-			<nav className="flex flex-1 items-center justify-end gap-1">
+			<nav className="flex flex-1 items-center justify-end">
 				{links.map((l) => (
 					<Link
 						key={l.to}
 						to={l.to}
-						activeProps={{ className: "bg-accent" }}
 						className={buttonVariants({ variant: "ghost", size: "sm" })}
 					>
 						{l.label}

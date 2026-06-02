@@ -2,21 +2,27 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Plus } from "lucide-react";
 import { Button } from "#/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "#/components/ui/card";
+import { api } from "#/lib/api";
 
 export const Route = createFileRoute("/admin/")({
 	staticData: { breadcrumb: "Dashboard" },
+	loader: () => api.courses.list(),
 	component: AdminDashboard,
 });
 
-// TODO Phase 6: replace with real counts once an admin stats endpoint exists
-const stats = [
-	{ label: "Courses", value: "1", to: "/admin/courses" as const },
-	{ label: "Lessons", value: "3" },
-	{ label: "Students", value: "1" },
-	{ label: "Completions", value: "0" },
-];
-
 function AdminDashboard() {
+	const courses = Route.useLoaderData();
+	const stats = [
+		{
+			label: "Courses",
+			value: String(courses.length),
+			to: "/admin/courses" as const,
+		},
+		{ label: "Lessons", value: "—" },
+		{ label: "Students", value: "—" },
+		{ label: "Completions", value: "—" },
+	];
+
 	return (
 		<div>
 			<div className="flex items-center justify-between">

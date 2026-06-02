@@ -10,7 +10,7 @@ import { authClient } from "#/lib/auth-client";
 import { PasswordInput } from "#/components/ui/password-input";
 
 const loginSchema = z.object({
-	email: z.string().email("Enter a valid email"),
+	email: z.email("Enter a valid email"),
 	password: z.string().min(8, "Password must be at least 8 characters"),
 });
 

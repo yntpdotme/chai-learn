@@ -45,7 +45,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 	return (
 		<html lang="en">
 			<head>
-
+				<HeadContent />
 			</head>
 			<body className="max-w-5xl mx-auto px-4 sm:px-6">
 				{children}

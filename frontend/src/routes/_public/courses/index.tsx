@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "#/components/ui/card";
 import { api } from "#/lib/api";
 
 export const Route = createFileRoute("/_public/courses/")({
+	staticData: { breadcrumb: "Courses" },
 	loader: () => api.courses.list(),
 	component: CoursesPage,
 });

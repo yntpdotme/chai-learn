@@ -18,12 +18,12 @@ export function Navbar() {
 					<ThemeToggle variant="minimal" />
 					{user ? (
 						user.role === "admin" ? (
-							<Button
-								className={buttonVariants({ variant: "outline" })}
-								render={<Link to="/admin" />}
+							<Link
+								to="/admin"
+								className={buttonVariants({ variant: "outline", size: "sm" })}
 							>
 								Admin
-							</Button>
+							</Link>
 						) : (
 							<Button
 								className={buttonVariants({ variant: "outline" })}
@@ -33,7 +33,10 @@ export function Navbar() {
 							</Button>
 						)
 					) : (
-						<Link to="/login" className={buttonVariants({variant: "default"})}>
+						<Link
+							to="/login"
+							className={buttonVariants({ variant: "default" })}
+						>
 							Login
 						</Link>
 					)}

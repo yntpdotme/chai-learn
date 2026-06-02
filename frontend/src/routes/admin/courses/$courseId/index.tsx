@@ -1,19 +1,15 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, getRouteApi, Link } from "@tanstack/react-router";
 import { Pencil, Plus } from "lucide-react";
 import { Button } from "#/components/ui/button";
-import { mockCourses } from "#/features/admin/mock-data";
 
 export const Route = createFileRoute("/admin/courses/$courseId/")({
-	loader: ({ params }) => {
-		const course = mockCourses.find((c) => c.id === params.courseId);
-		if (!course) throw notFound();
-		return course;
-	},
 	component: CourseDetailPage,
 });
 
+const routeApi = getRouteApi("/admin/courses/$courseId");
+
 function CourseDetailPage() {
-	const course = Route.useLoaderData();
+	const course = routeApi.useLoaderData();
 
 	return (
 		<div>
@@ -55,21 +51,25 @@ function CourseDetailPage() {
 				</Button>
 			</div>
 
-			<ul className="mt-3 divide-y rounded-md border">
-				{course.lessons.map((lesson) => (
-					<li
-						key={lesson.id}
-						className="flex items-center justify-between px-4 py-3"
-					>
-						<span className="text-sm">
-							<span className="mr-2 text-muted-foreground">
-								{lesson.order}.
+			{course.lessons.length === 0 ? (
+				<p className="mt-3 text-sm text-muted-foreground">No lessons yet.</p>
+			) : (
+				<ul className="mt-3 divide-y rounded-md border">
+					{course.lessons.map((lesson) => (
+						<li
+							key={lesson.id}
+							className="flex items-center justify-between px-4 py-3"
+						>
+							<span className="text-sm">
+								<span className="mr-2 text-muted-foreground">
+									{lesson.order}.
+								</span>
+								{lesson.title}
 							</span>
-							{lesson.title}
-						</span>
-					</li>
-				))}
-			</ul>
+						</li>
+					))}
+				</ul>
+			)}
 		</div>
 	);
 }
