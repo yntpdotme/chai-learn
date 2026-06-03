@@ -2,8 +2,11 @@ import {
 	createFileRoute,
 	getRouteApi,
 	useNavigate,
+	useRouter,
 } from "@tanstack/react-router";
+
 import { LessonForm } from "#/features/lessons/lesson-form";
+import { api } from "#/lib/api";
 
 export const Route = createFileRoute("/admin/courses/$courseId/lessons/new")({
 	staticData: { breadcrumb: "New lesson" },
@@ -15,6 +18,7 @@ const routeApi = getRouteApi("/admin/courses/$courseId");
 function NewLessonPage() {
 	const course = routeApi.useLoaderData();
 	const navigate = useNavigate();
+	const router = useRouter();
 
 	return (
 		<div>
@@ -23,9 +27,10 @@ function NewLessonPage() {
 			<div className="mt-6">
 				<LessonForm
 					submitLabel="Create lesson"
-					onSubmit={(value) => {
-						// TODO: POST /api/admin/courses/:courseId/lessons — endpoint doesn't exist yet
-						console.log("create lesson for course", course.id, value);
+					onSubmit={async (value) => {
+						await api.admin.lessons.create(course.id, value);
+						await router.invalidate();
+
 						navigate({
 							to: "/admin/courses/$courseId",
 							params: { courseId: course.id },

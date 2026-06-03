@@ -1,10 +1,12 @@
 import { useForm } from "@tanstack/react-form";
 import { useSelector } from "@tanstack/react-store";
+import { useState } from "react";
 import { z } from "zod";
+
+import { Button } from "#/components/ui/button";
 import { FormItem, FormLabel, FormMessage } from "#/components/ui/form-fields";
 import { Input } from "#/components/ui/input";
 import { Textarea } from "#/components/ui/textarea";
-import { Button } from "#/components/ui/button";
 
 const lessonSchema = z.object({
 	title: z.string().min(2, "Title must be at least 2 characters"),
@@ -27,6 +29,8 @@ export function LessonForm({
 	onSubmit: (value: LessonFormValues) => void | Promise<void>;
 	submitLabel?: string;
 }) {
+	const [formError, setFormError] = useState<string | null>(null);
+
 	const form = useForm({
 		defaultValues: {
 			title: defaultValues?.title ?? "",
@@ -34,7 +38,14 @@ export function LessonForm({
 			order: defaultValues?.order ?? 1,
 		},
 		onSubmit: async ({ value }) => {
-			await onSubmit(lessonSchema.parse(value));
+			setFormError(null);
+			try {
+				await onSubmit(lessonSchema.parse(value));
+			} catch (err) {
+				setFormError(
+					err instanceof Error ? err.message : "Something went wrong",
+				);
+			}
 		},
 	});
 
@@ -126,6 +137,8 @@ export function LessonForm({
 					</FormItem>
 				)}
 			</form.Field>
+
+			{formError && <p className="text-sm text-destructive">{formError}</p>}
 
 			<Button type="submit" disabled={!canSubmit || isSubmitting}>
 				{isSubmitting ? "Saving…" : submitLabel}

@@ -13,6 +13,8 @@ import {
 	requestLogger,
 } from "#middleware/index.js";
 import {
+	adminCoursesRoute,
+	adminLessonsRoute,
 	coursesRoute,
 	healthRoute,
 	lessonsRoute,
@@ -42,6 +44,8 @@ app.route("/api/courses", coursesRoute);
 app.route("/api/lessons", lessonsRoute);
 app.route("/api/progress", progressRoute);
 app.route("/api/me", meRoute);
+app.route("/api/admin/courses", adminCoursesRoute);
+app.route("/api/admin/lessons", adminLessonsRoute);
 
 app.onError(errorHandler);
 app.notFound(notFoundHandler);

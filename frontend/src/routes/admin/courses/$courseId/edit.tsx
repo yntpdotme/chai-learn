@@ -2,8 +2,10 @@ import {
 	createFileRoute,
 	getRouteApi,
 	useNavigate,
+	useRouter,
 } from "@tanstack/react-router";
 import { CourseForm } from "#/features/courses/course-form";
+import { api } from "#/lib/api";
 
 export const Route = createFileRoute("/admin/courses/$courseId/edit")({
 	staticData: { breadcrumb: "Edit" },
@@ -15,6 +17,7 @@ const routeApi = getRouteApi("/admin/courses/$courseId");
 function EditCoursePage() {
 	const course = routeApi.useLoaderData();
 	const navigate = useNavigate();
+	const router = useRouter();
 
 	return (
 		<div>
@@ -23,9 +26,9 @@ function EditCoursePage() {
 				<CourseForm
 					defaultValues={course}
 					submitLabel="Save changes"
-					onSubmit={(value) => {
-						// TODO: PATCH /api/admin/courses/:id — endpoint doesn't exist yet
-						console.log("update course", course.id, value);
+					onSubmit={async (value) => {
+						await api.admin.courses.update(course.id, value);
+						await router.invalidate();
 						navigate({
 							to: "/admin/courses/$courseId",
 							params: { courseId: course.id },

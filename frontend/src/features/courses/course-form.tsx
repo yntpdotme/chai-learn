@@ -1,6 +1,6 @@
 import { useForm } from "@tanstack/react-form";
 import { useSelector } from "@tanstack/react-store";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { z } from "zod";
 import { Button } from "#/components/ui/button";
 import { FormItem, FormLabel, FormMessage } from "#/components/ui/form-fields";
@@ -41,6 +41,7 @@ export function CourseForm({
 	submitLabel?: string;
 }) {
 	const slugTouched = useRef(Boolean(defaultValues?.slug));
+	const [formError, setFormError] = useState<string | null>(null);
 
 	const form = useForm({
 		defaultValues: {
@@ -49,7 +50,14 @@ export function CourseForm({
 			description: defaultValues?.description ?? "",
 		},
 		onSubmit: async ({ value }) => {
-			await onSubmit(courseSchema.parse(value));
+			setFormError(null);
+			try {
+				await onSubmit(courseSchema.parse(value));
+			} catch (err) {
+				setFormError(
+					err instanceof Error ? err.message : "Something went wrong",
+				);
+			}
 		},
 	});
 
@@ -136,6 +144,8 @@ export function CourseForm({
 					</FormItem>
 				)}
 			</form.Field>
+
+			{formError && <p className="text-sm text-destructive">{formError}</p>}
 
 			<Button type="submit" disabled={!canSubmit || isSubmitting}>
 				{isSubmitting ? "Saving…" : submitLabel}

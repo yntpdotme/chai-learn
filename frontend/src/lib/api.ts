@@ -99,4 +99,39 @@ export const api = {
 				role: "student" | "admin";
 			}>("/api/me"),
 	},
+	admin: {
+		courses: {
+			create: (input: { title: string; slug: string; description?: string }) =>
+				apiFetch<Course>("/api/admin/courses", {
+					method: "POST",
+					body: JSON.stringify(input),
+				}),
+			update: (
+				id: string,
+				input: Partial<{ title: string; slug: string; description?: string }>,
+			) =>
+				apiFetch<Course>(`/api/admin/courses/${id}`, {
+					method: "PATCH",
+					body: JSON.stringify(input),
+				}),
+		},
+		lessons: {
+			create: (
+				courseId: string,
+				input: { title: string; content: string; order: number },
+			) =>
+				apiFetch<Lesson>(`/api/admin/courses/${courseId}/lessons`, {
+					method: "POST",
+					body: JSON.stringify(input),
+				}),
+			update: (
+				id: string,
+				input: Partial<{ title: string; content: string; order: number }>,
+			) =>
+				apiFetch<Lesson>(`/api/admin/lessons/${id}`, {
+					method: "PATCH",
+					body: JSON.stringify(input),
+				}),
+		},
+	},
 };
