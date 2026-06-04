@@ -47,6 +47,13 @@ async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
 	return body as T;
 }
 
+export type AdminStats = {
+	courses: number;
+	lessons: number;
+	students: number;
+	completions: number;
+};
+
 export type Course = {
 	id: string;
 	title: string;
@@ -100,6 +107,9 @@ export const api = {
 			}>("/api/me"),
 	},
 	admin: {
+		stats: {
+			get: () => apiFetch<AdminStats>("/api/admin/stats"),
+		},
 		courses: {
 			create: (input: { title: string; slug: string; description?: string }) =>
 				apiFetch<Course>("/api/admin/courses", {
@@ -114,6 +124,8 @@ export const api = {
 					method: "PATCH",
 					body: JSON.stringify(input),
 				}),
+			delete: (id: string) =>
+				apiFetch<void>(`/api/admin/courses/${id}`, { method: "DELETE" }),
 		},
 		lessons: {
 			create: (
@@ -132,6 +144,8 @@ export const api = {
 					method: "PATCH",
 					body: JSON.stringify(input),
 				}),
+			delete: (id: string) =>
+				apiFetch<void>(`/api/admin/lessons/${id}`, { method: "DELETE" }),
 		},
 	},
 };

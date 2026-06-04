@@ -1,6 +1,13 @@
-import { createFileRoute, getRouteApi, Link } from "@tanstack/react-router";
+import {
+	createFileRoute,
+	getRouteApi,
+	Link,
+	useRouter,
+} from "@tanstack/react-router";
 import { Pencil, Plus } from "lucide-react";
 import { Button } from "#/components/ui/button";
+import { ConfirmDeleteDialog } from "#/components/confirm-delete-dialog";
+import { api } from "#/lib/api";
 
 export const Route = createFileRoute("/admin/courses/$courseId/")({
 	component: CourseDetailPage,
@@ -10,6 +17,7 @@ const routeApi = getRouteApi("/admin/courses/$courseId");
 
 function CourseDetailPage() {
 	const course = routeApi.useLoaderData();
+	const router = useRouter();
 
 	return (
 		<div>
@@ -66,6 +74,15 @@ function CourseDetailPage() {
 								</span>
 								{lesson.title}
 							</span>
+
+							<ConfirmDeleteDialog
+								title={`Delete "${lesson.title}"?`}
+								description="This permanently deletes the lesson and any student progress on it. This can't be undone."
+								onConfirm={async () => {
+									await api.admin.lessons.delete(lesson.id);
+									await router.invalidate();
+								}}
+							/>
 						</li>
 					))}
 				</ul>

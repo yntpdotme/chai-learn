@@ -34,3 +34,19 @@ adminLessonsRoute.patch(
 		return c.json({ data: updated });
 	},
 );
+
+// DELETE /api/admin/lessons/:id — cascades to progress via FK constraint
+adminLessonsRoute.delete("/:id", async (c) => {
+	const id = parseUuidParam(c.req.param("id"));
+
+	const [deleted] = await db
+		.delete(lessons)
+		.where(eq(lessons.id, id))
+		.returning();
+
+	if (!deleted) {
+		throw new HTTPException(404, { message: `Lesson ${id} not found` });
+	}
+
+	return c.body(null, 204);
+});

@@ -1,6 +1,7 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate, useRouter } from "@tanstack/react-router";
 import { Plus, Search } from "lucide-react";
-
+import { useMemo, useState } from "react";
+import { ConfirmDeleteDialog } from "#/components/confirm-delete-dialog";
 import { Button } from "#/components/ui/button";
 import {
 	InputGroup,
@@ -15,10 +16,22 @@ import {
 	TableHeader,
 	TableRow,
 } from "#/components/ui/table";
-import type { Course } from "#/lib/api";
+import { api, type Course } from "#/lib/api";
 
 export function CourseList({ courses }: { courses: Course[] }) {
 	const navigate = useNavigate();
+	const router = useRouter();
+	const [search, setSearch] = useState("");
+
+	const filtered = useMemo(() => {
+		const term = search.trim().toLowerCase();
+		if (!term) return courses;
+		return courses.filter(
+			(c) =>
+				c.title.toLowerCase().includes(term) ||
+				c.slug.toLowerCase().includes(term),
+		);
+	}, [courses, search]);
 
 	return (
 		<div>
@@ -37,7 +50,11 @@ export function CourseList({ courses }: { courses: Course[] }) {
 
 			<div className="relative mt-6 max-w-sm">
 				<InputGroup className="mb-0.5 max-w-md">
-					<InputGroupInput placeholder="Search courses..." />
+					<InputGroupInput
+						placeholder="Search courses..."
+						value={search}
+						onChange={(e) => setSearch(e.target.value)}
+					/>
 					<InputGroupAddon>
 						<Search className="size-4 text-muted-foreground" />
 					</InputGroupAddon>
@@ -48,16 +65,21 @@ export function CourseList({ courses }: { courses: Course[] }) {
 				<p className="mt-6 text-sm text-muted-foreground">
 					No courses yet — create your first one.
 				</p>
+			) : filtered.length === 0 ? (
+				<p className="mt-6 text-sm text-muted-foreground">
+					No courses match "{search}".
+				</p>
 			) : (
 				<Table className="mt-4">
 					<TableHeader>
 						<TableRow>
 							<TableHead>Course</TableHead>
 							<TableHead>Created</TableHead>
+							<TableHead className="w-12" />
 						</TableRow>
 					</TableHeader>
 					<TableBody>
-						{courses.map((course) => (
+						{filtered.map((course) => (
 							<TableRow
 								key={course.id}
 								tabIndex={0}
@@ -83,6 +105,16 @@ export function CourseList({ courses }: { courses: Course[] }) {
 								</TableCell>
 								<TableCell className="text-muted-foreground">
 									{new Date(course.createdAt).toLocaleDateString()}
+								</TableCell>
+								<TableCell className="z-50">
+									<ConfirmDeleteDialog
+										title={`Delete "${course.title}"?`}
+										description="This permanently deletes the course and all of its lessons. This can't be undone."
+										onConfirm={async () => {
+											await api.admin.courses.delete(course.id);
+											await router.invalidate();
+										}}
+									/>
 								</TableCell>
 							</TableRow>
 						))}

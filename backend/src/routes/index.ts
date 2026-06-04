@@ -1,5 +1,6 @@
 export * from "./admin-courses.js";
 export * from "./admin-lessons.js";
+export * from "./admin-stats.js";
 export * from "./courses.js";
 export * from "./health.js";
 export * from "./lessons.js";

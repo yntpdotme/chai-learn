@@ -77,3 +77,19 @@ adminCoursesRoute.post(
 		return c.json({ data: created }, 201);
 	},
 );
+
+// DELETE /api/admin/courses/:id — cascades to lessons + progress via FK constraints
+adminCoursesRoute.delete("/:id", async (c) => {
+	const id = parseUuidParam(c.req.param("id"));
+
+	const [deleted] = await db
+		.delete(courses)
+		.where(eq(courses.id, id))
+		.returning();
+
+	if (!deleted) {
+		throw new HTTPException(404, { message: `Course ${id} not found` });
+	}
+
+	return c.body(null, 204);
+});

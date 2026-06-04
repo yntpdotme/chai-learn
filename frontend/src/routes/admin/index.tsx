@@ -6,21 +6,21 @@ import { api } from "#/lib/api";
 
 export const Route = createFileRoute("/admin/")({
 	staticData: { breadcrumb: "Dashboard" },
-	loader: () => api.courses.list(),
+	loader: () => api.admin.stats.get(),
 	component: AdminDashboard,
 });
 
 function AdminDashboard() {
-	const courses = Route.useLoaderData();
+	const data = Route.useLoaderData();
 	const stats = [
 		{
 			label: "Courses",
-			value: String(courses.length),
+			value: String(data.courses),
 			to: "/admin/courses" as const,
 		},
-		{ label: "Lessons", value: "—" },
-		{ label: "Students", value: "—" },
-		{ label: "Completions", value: "—" },
+		{ label: "Lessons", value: String(data.lessons) },
+		{ label: "Students", value: String(data.students) },
+		{ label: "Completions", value: String(data.completions) },
 	];
 
 	return (

@@ -15,6 +15,7 @@ import {
 import {
 	adminCoursesRoute,
 	adminLessonsRoute,
+	adminStatsRoute,
 	coursesRoute,
 	healthRoute,
 	lessonsRoute,
@@ -46,6 +47,7 @@ app.route("/api/progress", progressRoute);
 app.route("/api/me", meRoute);
 app.route("/api/admin/courses", adminCoursesRoute);
 app.route("/api/admin/lessons", adminLessonsRoute);
+app.route("/api/admin/stats", adminStatsRoute);
 
 app.onError(errorHandler);
 app.notFound(notFoundHandler);
