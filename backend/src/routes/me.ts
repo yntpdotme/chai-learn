@@ -10,6 +10,9 @@ meRoute.use("*", requireAuth);
 // GET /api/me — thin wrapper so the frontend doesn't need to know
 // about Better Auth's own session shape/endpoint to get "who am I".
 meRoute.get("/", (c) => {
-	const user = c.get("user")!;
+	const user = c.get("user");
+	if (!user) {
+		return c.json({ error: "Unauthorized" }, 401);
+	}
 	return c.json({ data: user });
 });

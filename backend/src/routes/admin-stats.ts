@@ -16,7 +16,10 @@ adminStatsRoute.get("/", async (c) => {
 		await Promise.all([
 			db.select({ value: count() }).from(courses),
 			db.select({ value: count() }).from(lessons),
-			db.select({ value: count() }).from(users).where(eq(users.role, "student")),
+			db
+				.select({ value: count() })
+				.from(users)
+				.where(eq(users.role, "student")),
 			db
 				.select({ value: count() })
 				.from(progress)
