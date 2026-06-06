@@ -2,17 +2,15 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "nodenext",
+    "moduleResolution": "nodenext",
     "strict": true,
     "verbatimModuleSyntax": true,
     "skipLibCheck": true,
-    "types": [
-      "node"
-    ],
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "types": ["node"],
     "jsx": "react-jsx",
-    "jsxImportSource": "hono/jsx",
-    "customConditions": ["development"],
-    "rootDir": "./src",
-    "outDir": "./dist"
+    "jsxImportSource": "hono/jsx"
   },
-  "exclude": ["node_modules", "drizzle.config.ts", "drizzle/**", "dist"]
+  "exclude": ["node_modules"]
 }

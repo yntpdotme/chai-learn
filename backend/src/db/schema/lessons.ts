@@ -1,7 +1,7 @@
 import { integer, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import z from "zod";
 
-import { courses } from "#db/schema/courses.js";
+import { courses } from "#db/schema/courses.ts";
 
 export const lessons = pgTable("lessons", {
 	id: uuid("id").defaultRandom().primaryKey(),

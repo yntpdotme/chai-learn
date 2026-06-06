@@ -1,7 +1,7 @@
 import "dotenv/config";
-import { seedCourses } from "#db/seed/courses.js";
-import { seedLessons } from "#db/seed/lessons.js";
-import { seedUsers } from "#db/seed/users.js";
+import { seedCourses } from "#db/seed/courses.ts";
+import { seedLessons } from "#db/seed/lessons.ts";
+import { seedUsers } from "#db/seed/users.ts";
 
 async function main() {
 	console.log("🌱 Seeding database...");

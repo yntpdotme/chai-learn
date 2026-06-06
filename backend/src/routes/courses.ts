@@ -2,9 +2,9 @@ import { eq } from "drizzle-orm";
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
 
-import { db } from "#db/index.js";
-import { courses, lessons } from "#db/schema/index.js";
-import { parseUuidParam } from "#lib/params.js";
+import { db } from "#db/index.ts";
+import { courses, lessons } from "#db/schema/index.ts";
+import { parseUuidParam } from "#lib/params.ts";
 
 export const coursesRoute = new Hono();
 

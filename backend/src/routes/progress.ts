@@ -3,10 +3,10 @@ import { zValidator } from "@hono/zod-validator";
 import { and, eq } from "drizzle-orm";
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
-import { db } from "#db/index.js";
-import { lessons, progress, upsertProgressSchema } from "#db/schema/index.js";
-import { requireAuth } from "#middleware/auth.js";
-import type { AppVariables } from "#types.js";
+import { db } from "#db/index.ts";
+import { lessons, progress, upsertProgressSchema } from "#db/schema/index.ts";
+import { requireAuth } from "#middleware/auth.ts";
+import type { AppVariables } from "#types.ts";
 
 export const progressRoute = new Hono<{ Variables: AppVariables }>();
 

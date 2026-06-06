@@ -1,8 +1,8 @@
 // Path: src/middleware/auth.ts
 import type { MiddlewareHandler } from "hono";
 import { HTTPException } from "hono/http-exception";
-import { auth } from "#lib/auth.js";
-import type { AppVariables } from "#types.js";
+import { auth } from "#lib/auth.ts";
+import type { AppVariables } from "#types.ts";
 
 // Runs on every request. Cheap when there's no session cookie — just
 // makes `c.get("user")` available downstream without every route

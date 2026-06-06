@@ -1,10 +1,10 @@
 import { count, eq } from "drizzle-orm";
 import { Hono } from "hono";
 
-import { db } from "#db/index.js";
-import { courses, lessons, progress, users } from "#db/schema/index.js"; // ← confirm "user" is the real export name
-import { requireAdmin, requireAuth } from "#middleware/index.js";
-import type { AppVariables } from "#types.js";
+import { db } from "#db/index.ts";
+import { courses, lessons, progress, users } from "#db/schema/index.ts"; // ← confirm "user" is the real export name
+import { requireAdmin, requireAuth } from "#middleware/index.ts";
+import type { AppVariables } from "#types.ts";
 
 export const adminStatsRoute = new Hono<{ Variables: AppVariables }>();
 

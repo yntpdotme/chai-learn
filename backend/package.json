@@ -2,24 +2,21 @@
   "name": "backend",
   "type": "module",
   "imports": {
-    "#*": {
-      "development": "./src/*",
-      "default": "./dist/*"
-    }
+    "#*": "./src/*"
   },
   "scripts": {
-    "dev": "NODE_OPTIONS='--conditions=development' tsx watch src/index.ts",
-    "build": "tsc",
-    "start": "node dist/index.js",
+    "dev": "node --watch src/index.ts",
+    "start": "node src/index.ts",
+    "typecheck": "tsc --noEmit",
     "format": "biome format --write .",
     "lint": "biome lint",
     "check": "biome check",
     "test": "vitest",
-    "db:generate": "NODE_OPTIONS='--conditions=development' drizzle-kit generate",
-    "db:migrate": "NODE_OPTIONS='--conditions=development' drizzle-kit migrate",
-    "db:push": "NODE_OPTIONS='--conditions=development' drizzle-kit push",
-    "db:studio": "NODE_OPTIONS='--conditions=development' drizzle-kit studio",
-    "db:seed": "NODE_OPTIONS='--conditions=development' tsx src/db/seed/index.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "db:seed": "node src/db/seed/index.ts",
     "db:migrate:prod": "drizzle-kit migrate"
   },
   "dependencies": {
@@ -36,7 +33,6 @@
     "@types/node": "^26.1.2",
     "dotenv": "^17.4.2",
     "drizzle-kit": "^0.31.10",
-    "tsx": "^4.23.10",
     "typescript": "^7.0.2"
   }
 }

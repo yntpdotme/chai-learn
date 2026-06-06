@@ -1,7 +1,7 @@
 // Path: src/routes/me.ts
 import { Hono } from "hono";
-import { requireAuth } from "#middleware/index.js";
-import type { AppVariables } from "#types.js";
+import { requireAuth } from "#middleware/index.ts";
+import type { AppVariables } from "#types.ts";
 
 export const meRoute = new Hono<{ Variables: AppVariables }>();
 

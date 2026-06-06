@@ -4,14 +4,14 @@ import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 
-import { env } from "#env.js";
-import { auth } from "#lib/auth.js";
+import { env } from "#env.ts";
+import { auth } from "#lib/auth.ts";
 import {
 	attachSession,
 	errorHandler,
 	notFoundHandler,
 	requestLogger,
-} from "#middleware/index.js";
+} from "#middleware/index.ts";
 import {
 	adminCoursesRoute,
 	adminLessonsRoute,
@@ -21,8 +21,8 @@ import {
 	lessonsRoute,
 	meRoute,
 	progressRoute,
-} from "#routes/index.js";
-import type { AppVariables } from "#types.js";
+} from "#routes/index.ts";
+import type { AppVariables } from "#types.ts";
 
 const app = new Hono<{ Variables: AppVariables }>();
 

@@ -1,6 +1,6 @@
 // Path: src/db/schema/auth.ts
 import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
-import { users } from "./users.js";
+import { users } from "./users.ts";
 
 // One row per active login. Better Auth issues a session token
 // (stored in an httpOnly cookie) that maps to a row here.

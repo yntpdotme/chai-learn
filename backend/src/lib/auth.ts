@@ -1,9 +1,9 @@
 // Path: src/lib/auth.ts
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { db } from "#db/index.js";
-import { accounts, sessions, users, verifications } from "#db/schema/index.js";
-import { env } from "#env.js";
+import { db } from "#db/index.ts";
+import { accounts, sessions, users, verifications } from "#db/schema/index.ts";
+import { env } from "#env.ts";
 
 export const auth = betterAuth({
 	baseURL: env.BETTER_AUTH_URL,

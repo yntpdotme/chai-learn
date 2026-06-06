@@ -1,8 +1,8 @@
 // Path: src/db/seed/dev/users.ts
 import { eq } from "drizzle-orm";
-import { db } from "#db/index.js";
-import { users } from "#db/schema/index.js";
-import { auth } from "#lib/auth.js";
+import { db } from "#db/index.ts";
+import { users } from "#db/schema/index.ts";
+import { auth } from "#lib/auth.ts";
 
 // Dev-only credentials — never real passwords, never used outside seeding.
 const DEV_USERS = [

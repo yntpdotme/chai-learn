@@ -42,9 +42,6 @@ importers:
       drizzle-kit:
         specifier: ^0.31.10
         version: 0.31.10
-      tsx:
-        specifier: ^4.23.10
-        version: 4.23.10
       typescript:
         specifier: ^7.0.2
         version: 7.0.2

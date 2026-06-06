@@ -1,5 +1,5 @@
-import { db } from "#db/index.js";
-import { courses } from "#db/schema/courses.js";
+import { db } from "#db/index.ts";
+import { courses } from "#db/schema/courses.ts";
 
 export async function seedCourses() {
 	await db
