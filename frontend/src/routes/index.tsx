@@ -19,7 +19,12 @@ function HomePage() {
 				Structured courses, hands-on lessons, and a clear path from zero to
 				production.
 			</p>
-			<Button size="lg" className="mt-8" render={<Link to="/courses" />}>
+			<Button
+				size="lg"
+				className="mt-8"
+				render={<Link to="/courses" />}
+				nativeButton={false}
+			>
 				Browse Courses
 				<ArrowRight className="ml-2 size-4" />
 			</Button>
