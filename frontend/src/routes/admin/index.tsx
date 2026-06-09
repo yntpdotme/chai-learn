@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Plus } from "lucide-react";
-import { Button } from "#/components/ui/button";
+import { Button, buttonVariants } from "#/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "#/components/ui/card";
 import { api } from "#/lib/api";
 
@@ -27,10 +27,10 @@ function AdminDashboard() {
 		<div>
 			<div className="flex items-center justify-between">
 				<h1 className="text-2xl font-semibold">Dashboard</h1>
-				<Button render={<Link to="/admin/courses/new" />}>
+				<Link to="/admin/courses/new" className={buttonVariants({ variant: "default" })}>
 					<Plus className="mr-1.5 size-4" />
 					New course
-				</Button>
+				</Link>
 			</div>
 
 			<div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">

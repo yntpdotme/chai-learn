@@ -3,6 +3,7 @@ import tailwindcss from "@tailwindcss/vite";
 import { devtools } from "@tanstack/devtools-vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact, { reactCompilerPreset } from "@vitejs/plugin-react";
+import { nitro } from "nitro/vite";
 import { defineConfig } from "vite";
 
 const config = defineConfig({
@@ -11,17 +12,10 @@ const config = defineConfig({
 		devtools(),
 		tailwindcss(),
 		tanstackStart(),
+		nitro({ preset: "node-server" }),
 		viteReact(),
 		babel({ presets: [reactCompilerPreset()] }),
 	],
-	server: {
-		proxy: {
-			"/api": {
-				target: "http://localhost:3000", // Hono backend
-				changeOrigin: true,
-			},
-		},
-	},
 });
 
 export default config;
