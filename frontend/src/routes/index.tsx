@@ -8,7 +8,7 @@ export const Route = createFileRoute("/")({
 
 function HomePage() {
 	return (
-		<main className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center px-4 text-center">
+		<main className="relative flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center px-4 text-center">
 			<p className="text-sm font-medium text-primary">
 				Welcome to Chai aur DevOps
 			</p>
@@ -28,6 +28,9 @@ function HomePage() {
 				Browse Courses
 				<ArrowRight className="ml-2 size-4" />
 			</Button>
+			<p className="absolute inset-x-0 bottom-4 text-xs text-muted-foreground">
+				Project by YNTP
+			</p>
 		</main>
 	);
 }
