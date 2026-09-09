@@ -1,4 +1,5 @@
 // Path: /src/env.ts
+import "#lib/load-env.ts";
 import { z } from "zod";
 
 const envSchema = z.object({

@@ -1,4 +1,4 @@
-import "dotenv/config";
+import "#lib/load-env.ts";
 import { seedCourses } from "#db/seed/courses.ts";
 import { seedLessons } from "#db/seed/lessons.ts";
 import { seedUsers } from "#db/seed/users.ts";

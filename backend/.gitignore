@@ -11,9 +11,11 @@
 # deps
 node_modules/
 
-# env
+# env — ignore every real env file, keep the *.example templates
 .env
-.env.production
+.env.*
+!.env.example
+!.env.*.example
 
 # logs
 logs/

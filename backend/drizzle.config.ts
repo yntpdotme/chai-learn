@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import 'dotenv/config';
+import "./src/lib/load-env.ts";
 
 import { defineConfig } from "drizzle-kit";
 
