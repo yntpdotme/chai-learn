@@ -2,10 +2,10 @@ import { useForm } from "@tanstack/react-form";
 import { useSelector } from "@tanstack/react-store";
 import { useState } from "react";
 import { z } from "zod";
+import { Button } from "#/components/ui/button";
 import { FormItem, FormLabel, FormMessage } from "#/components/ui/form-fields";
 import { Input } from "#/components/ui/input";
 import { PasswordInput } from "#/components/ui/password-input";
-import { Button } from "#/components/ui/button";
 import { authClient } from "#/lib/auth-client";
 
 const signupSchema = z.object({

@@ -1,7 +1,7 @@
-import { pgTable, uuid, boolean, timestamp, unique } from "drizzle-orm/pg-core";
+import { boolean, pgTable, timestamp, unique, uuid } from "drizzle-orm/pg-core";
+import z from "zod";
 import { lessons } from "#db/schema/lessons.ts";
 import { users } from "#db/schema/users.ts";
-import z from "zod";
 
 export const progress = pgTable(
 	"progress",

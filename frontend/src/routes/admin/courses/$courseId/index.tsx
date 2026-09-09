@@ -5,8 +5,8 @@ import {
 	useRouter,
 } from "@tanstack/react-router";
 import { Pencil, Plus } from "lucide-react";
-import { Button } from "#/components/ui/button";
 import { ConfirmDeleteDialog } from "#/components/confirm-delete-dialog";
+import { Button } from "#/components/ui/button";
 import { api } from "#/lib/api";
 
 export const Route = createFileRoute("/admin/courses/$courseId/")({

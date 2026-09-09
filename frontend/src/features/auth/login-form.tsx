@@ -6,8 +6,8 @@ import { z } from "zod";
 import { Button } from "#/components/ui/button";
 import { FormItem, FormLabel, FormMessage } from "#/components/ui/form-fields";
 import { Input } from "#/components/ui/input";
-import { authClient } from "#/lib/auth-client";
 import { PasswordInput } from "#/components/ui/password-input";
+import { authClient } from "#/lib/auth-client";
 
 const loginSchema = z.object({
 	email: z.email("Enter a valid email"),
