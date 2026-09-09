@@ -1,0 +1,84 @@
+name: CD
+
+# Runs only after the CI workflow finishes on `main`, and only deploys
+# if CI actually passed (see the `if:` gate on the job below).
+#
+# Required repo secrets:
+#   EC2_HOST         - server hostname / IP
+#   EC2_USER         - SSH user (needs passwordless sudo for the two
+#                      `systemctl restart` commands below)
+#   SSH_PRIVATE_KEY  - private key whose public half is in the user's
+#                      ~/.ssh/authorized_keys on the server
+#
+# Server is expected to be set up by hand first (this is the "deploy
+# without CI/CD" lesson):
+#   - repo cloned at ~/chai-learn, tracking `main`
+#   - node (>= 22.18, or 24) and pnpm reachable on a non-login shell PATH
+#   - backend/.env.production  with DATABASE_URL, BETTER_AUTH_SECRET, etc.
+#   - frontend/.env.production with the real VITE_API_URL
+#   - systemd units named `backend` and `frontend`
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+    branches: [main]
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    # THE GATE — only deploy if CI actually passed
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.2.5
+        env:
+          # Deploy the exact commit CI validated, not whatever `main`
+          # happens to be by the time this job runs.
+          DEPLOY_SHA: ${{ github.event.workflow_run.head_sha }}
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          envs: DEPLOY_SHA
+          script: |
+            set -euo pipefail
+
+            # ssh-action opens a non-interactive shell, so nvm / corepack
+            # shims from ~/.bashrc are NOT loaded. Make node + pnpm reachable.
+            export PATH="$PATH:/usr/local/bin:$HOME/.local/share/pnpm"
+            command -v node >/dev/null || { echo "::error::node not on PATH"; exit 1; }
+            command -v pnpm >/dev/null || { echo "::error::pnpm not on PATH"; exit 1; }
+
+            cd ~/chai-learn
+            git fetch --quiet origin main
+            git reset --hard "$DEPLOY_SHA"
+
+            # ---- Build & migrate while the old version keeps serving ----
+            pnpm --dir backend install --frozen-lockfile
+            NODE_ENV=production pnpm --dir backend run db:migrate:prod
+
+            pnpm --dir frontend install --frozen-lockfile
+            pnpm --dir frontend run build
+
+            # ---- Swap to the new version ----
+            sudo systemctl restart backend
+            sudo systemctl restart frontend
+
+            # ---- Verify (the SSR server needs a few seconds to come up) ----
+            for i in $(seq 1 10); do
+              if curl -fsS http://localhost:3000/api/health >/dev/null; then
+                echo "health check passed"
+                exit 0
+              fi
+              echo "waiting for backend to report healthy... ($i/10)"
+              sleep 3
+            done
+            echo "::error::health check failed after restart"
+            exit 1
