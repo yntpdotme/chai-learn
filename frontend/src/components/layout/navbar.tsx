@@ -25,10 +25,7 @@ export function Navbar() {
 								Admin
 							</Link>
 						) : (
-							<Button
-								className={buttonVariants({ variant: "outline" , size: "sm" })}
-								disabled
-							>
+							<Button variant="outline" size="sm" disabled>
 								{user.name}
 							</Button>
 						)
