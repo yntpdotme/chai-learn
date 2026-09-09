@@ -1,7 +1,8 @@
 import { Link, useRouteContext } from "@tanstack/react-router";
 import { GraduationCap } from "lucide-react";
-import { Button, buttonVariants } from "#/components/ui/button";
+import { buttonVariants } from "#/components/ui/button";
 import ThemeToggle from "./theme-toggle";
+import { UserMenu } from "./user-menu";
 
 export function Navbar() {
 	const { user } = useRouteContext({ from: "__root__" });
@@ -17,18 +18,17 @@ export function Navbar() {
 				<nav className="flex items-center gap-2">
 					<ThemeToggle variant="minimal" />
 					{user ? (
-						user.role === "admin" ? (
-							<Link
-								to="/admin"
-								className={buttonVariants({ variant: "outline", size: "sm" })}
-							>
-								Admin
-							</Link>
-						) : (
-							<Button variant="outline" size="sm" disabled>
-								{user.name}
-							</Button>
-						)
+						<>
+							{user.role === "admin" && (
+								<Link
+									to="/admin"
+									className={buttonVariants({ variant: "outline", size: "sm" })}
+								>
+									Admin
+								</Link>
+							)}
+							<UserMenu name={user.name} />
+						</>
 					) : (
 						<Link
 							to="/login"

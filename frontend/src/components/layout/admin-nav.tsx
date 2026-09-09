@@ -1,7 +1,8 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useRouteContext } from "@tanstack/react-router";
 import { LibraryBigIcon } from "lucide-react";
 import { buttonVariants } from "#/components/ui/button";
 import ThemeToggle from "./theme-toggle";
+import { UserMenu } from "./user-menu";
 
 const links = [
 	{ to: "/admin", label: "Dashboard" },
@@ -9,6 +10,8 @@ const links = [
 ];
 
 export function AdminNav() {
+	const { user } = useRouteContext({ from: "__root__" });
+
 	return (
 		<div className="mx-auto flex h-16 items-center justify-between">
 			<Link
@@ -30,7 +33,10 @@ export function AdminNav() {
 					</Link>
 				))}
 			</nav>
-			<ThemeToggle variant="minimal" />
+			<div className="flex items-center gap-2">
+				<ThemeToggle variant="minimal" />
+				{user && <UserMenu name={user.name} />}
+			</div>
 		</div>
 	);
 }

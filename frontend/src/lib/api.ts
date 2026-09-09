@@ -16,11 +16,23 @@ function safeJsonParse(text: string): unknown {
 	}
 }
 
+// During SSR the browser cookie jar isn't available, so `credentials: "include"`
+// does nothing — forward the incoming request's Cookie header explicitly so
+// loaders/beforeLoad can see the session. This branch is stripped from the
+// client bundle by Vite's `import.meta.env.SSR` constant folding.
+async function forwardedHeaders(): Promise<HeadersInit> {
+	if (!import.meta.env.SSR) return {};
+	const { getRequestHeaders } = await import("@tanstack/react-start/server");
+	const cookie = getRequestHeaders().get("cookie");
+	return cookie ? { cookie } : {};
+}
+
 async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
 	const res = await fetch(`${API_URL}${path}`, {
 		...init,
 		credentials: "include",
 		headers: {
+			...(await forwardedHeaders()),
 			...(init?.body ? { "Content-Type": "application/json" } : {}),
 			...init?.headers,
 		},
