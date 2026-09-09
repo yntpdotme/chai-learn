@@ -12,6 +12,21 @@ export const progressRoute = new Hono<{ Variables: AppVariables }>();
 
 progressRoute.use("*", requireAuth);
 
+// GET /api/progress — every progress row for the logged-in user.
+progressRoute.get("/", async (c) => {
+	const user = c.get("user");
+	if (!user) {
+		return c.json({ error: "Unauthorized" }, 401);
+	}
+
+	const rows = await db
+		.select()
+		.from(progress)
+		.where(eq(progress.userId, user.id));
+
+	return c.json({ data: rows });
+});
+
 // POST /api/progress
 // Upserts progress for the logged-in user + a given lesson — relies on
 // the unique constraint already defined in the progress schema.

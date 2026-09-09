@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { CheckCircle2 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "#/components/ui/button";
 import { ApiError, api } from "#/lib/api";
 
@@ -14,6 +14,21 @@ function LessonPage() {
 	const [completed, setCompleted] = useState(false);
 	const [saving, setSaving] = useState(false);
 	const [error, setError] = useState<string | null>(null);
+
+	useEffect(() => {
+		let cancelled = false;
+		// 401 (signed out) just means not completed — swallow it.
+		api.progress
+			.list()
+			.then((rows) => {
+				if (cancelled) return;
+				setCompleted(rows.some((r) => r.lessonId === lesson.id && r.completed));
+			})
+			.catch(() => {});
+		return () => {
+			cancelled = true;
+		};
+	}, [lesson.id]);
 
 	async function markComplete() {
 		setSaving(true);

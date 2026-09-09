@@ -91,6 +91,7 @@ export const api = {
 		get: (id: string) => apiFetch<Lesson>(`/api/lessons/${id}`),
 	},
 	progress: {
+		list: () => apiFetch<Progress[]>("/api/progress"),
 		upsert: (input: { lessonId: string; completed: boolean }) =>
 			apiFetch<Progress>("/api/progress", {
 				method: "POST",
