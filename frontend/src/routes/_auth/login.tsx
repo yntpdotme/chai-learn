@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { z } from "zod";
 import { LoginForm } from "#/features/auth/login-form";
 
@@ -24,6 +24,15 @@ function LoginPage() {
 			<div className="mt-6">
 				<LoginForm onSuccess={() => navigate({ to: redirect || "/" })} />
 			</div>
+			<p className="mt-6 text-sm text-muted-foreground">
+				Don't have an account?{" "}
+				<Link
+					to="/signup"
+					className="text-primary underline-offset-4 hover:underline"
+				>
+					Sign up
+				</Link>
+			</p>
 		</main>
 	);
 }
