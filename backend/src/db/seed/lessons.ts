@@ -70,6 +70,54 @@ const LESSONS_BY_COURSE_SLUG: Record<
 			order: 12,
 		},
 	],
+	"linux-for-devops": [
+		{
+			title: "Introduction to Linux",
+			content: "What Linux is, distributions, and why it matters for DevOps.",
+			order: 1,
+		},
+		{
+			title: "File System and Navigation",
+			content:
+				"The Linux directory hierarchy and moving around with core commands.",
+			order: 2,
+		},
+		{
+			title: "User and Permissions",
+			content: "Users, groups, ownership, and the permission model.",
+			order: 3,
+		},
+		{
+			title: "Package Management",
+			content: "Installing and managing software with apt, dnf, and friends.",
+			order: 4,
+		},
+		{
+			title: "Process and Job Control",
+			content: "Inspecting processes, signals, and foreground/background jobs.",
+			order: 5,
+		},
+		{
+			title: "Capstone Project",
+			content: "Apply everything in a hands-on end-to-end exercise.",
+			order: 6,
+		},
+		{
+			title: "Bonus: CICD",
+			content: "A first look at wiring Linux skills into a CI/CD pipeline.",
+			order: 7,
+		},
+		{
+			title: "What's Next",
+			content: "Where to go from here to deepen your Linux skills.",
+			order: 8,
+		},
+		{
+			title: "Outro",
+			content: "Wrap-up and closing thoughts.",
+			order: 9,
+		},
+	],
 };
 
 export async function seedLessons() {
