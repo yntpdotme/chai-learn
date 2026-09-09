@@ -5,18 +5,22 @@ name: CD
 #
 # Required repo secrets:
 #   EC2_HOST         - server hostname / IP
-#   EC2_USER         - SSH user (needs passwordless sudo for the two
-#                      `systemctl restart` commands below)
+#   EC2_USER         - SSH user (needs passwordless sudo for none of this
+#                      anymore — PM2 runs as `yntp`, no systemctl calls)
 #   SSH_PRIVATE_KEY  - private key whose public half is in the user's
 #                      ~/.ssh/authorized_keys on the server
 #
 # Server is expected to be set up by hand first (this is the "deploy
 # without CI/CD" lesson):
-#   - repo cloned at ~/chai-learn, tracking `main`
-#   - node (>= 22.18, or 24) and pnpm reachable on a non-login shell PATH
+#   - repo cloned at /opt/chai-learn, owned by yntp:devops, tracking `main`
+#   - node (system-wide via NodeSource, /usr/bin/node) and pnpm/pm2
+#     installed globally so any user can reach them
 #   - backend/.env.production  with DATABASE_URL, BETTER_AUTH_SECRET, etc.
-#   - frontend/.env.production with the real VITE_API_URL
-#   - systemd units named `backend` and `frontend`
+#   - frontend/.env.production with the real VITE_API_URL and PORT
+#   - PM2 processes named `backend` and `frontend`, running as `yntp`,
+#     registered via `pm2 save` + `pm2 startup` (see PM2 bonus chapter)
+#   - EC2_USER has passwordless sudo to run commands as `yntp`
+#     (sudo -u yntp), OR EC2_USER *is* yntp and owns the checkout directly
 
 on:
   workflow_run:
@@ -50,13 +54,17 @@ jobs:
           script: |
             set -euo pipefail
 
-            # ssh-action opens a non-interactive shell, so nvm / corepack
-            # shims from ~/.bashrc are NOT loaded. Make node + pnpm reachable.
-            export PATH="$PATH:/usr/local/bin:$HOME/.local/share/pnpm"
+            # System-wide Node (NodeSource) lives at /usr/bin, and global
+            # npm packages (pnpm, pm2) land under /usr/lib/node_modules
+            # with bins symlinked into /usr/bin too — so a plain PATH
+            # usually finds them. Kept explicit here so a future switch
+            # back to a per-user install doesn't silently break this.
+            export PATH="/usr/bin:$PATH"
             command -v node >/dev/null || { echo "::error::node not on PATH"; exit 1; }
             command -v pnpm >/dev/null || { echo "::error::pnpm not on PATH"; exit 1; }
+            command -v pm2  >/dev/null || { echo "::error::pm2 not on PATH"; exit 1; }
 
-            cd ~/chai-learn
+            cd /opt/chai-learn
             git fetch --quiet origin main
             git reset --hard "$DEPLOY_SHA"
 
@@ -68,8 +76,12 @@ jobs:
             pnpm --dir frontend run build
 
             # ---- Swap to the new version ----
-            sudo systemctl restart backend
-            sudo systemctl restart frontend
+            # PM2 processes run under yntp's PM2 daemon, not the SSH user's.
+            # `pm2 reload` does a zero-downtime rolling restart (vs
+            # `systemctl restart`'s brief drop) — this is the concrete
+            # payoff called out in the PM2 bonus chapter.
+            sudo -u yntp -H pm2 reload backend
+            sudo -u yntp -H pm2 reload frontend
 
             # ---- Verify (the SSR server needs a few seconds to come up) ----
             for i in $(seq 1 10); do
