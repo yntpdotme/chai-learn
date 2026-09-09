@@ -1,6 +1,7 @@
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import { createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import { themeScript } from "#/components/layout/theme-store";
 import { ApiError, api } from "#/lib/api";
 import appCss from "../styles.css?url";
 
@@ -43,8 +44,12 @@ export const Route = createRootRoute({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
 	return (
-		<html lang="en">
+		<html lang="en" suppressHydrationWarning>
 			<head>
+				<script
+					// biome-ignore lint/security/noDangerouslySetInnerHtml: inline theme script must run before paint to avoid a flash
+					dangerouslySetInnerHTML={{ __html: themeScript }}
+				/>
 				<HeadContent />
 			</head>
 			<body className="max-w-5xl mx-auto px-4 sm:px-6">

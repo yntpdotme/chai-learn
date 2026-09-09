@@ -57,7 +57,18 @@ export function subscribeThemeMode(listener: (mode: ThemeMode) => void) {
 	return () => listeners.delete(listener);
 }
 
+/**
+ * Runs blocking in <head> before first paint so the theme is correct on load
+ * (including "auto" following the OS) with no flash. Keep in sync with
+ * applyToDocument above.
+ */
+export const themeScript = `(function(){try{var k=${JSON.stringify(
+	STORAGE_KEY,
+)};var m=localStorage.getItem(k);if(m!=="light"&&m!=="dark"&&m!=="auto")m="auto";var d=m==="auto"?(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"):m;var r=document.documentElement;r.classList.remove("light","dark");r.classList.add(d);if(m==="auto")r.removeAttribute("data-theme");else r.setAttribute("data-theme",m);r.style.colorScheme=d;}catch(e){}})();`;
+
 if (typeof window !== "undefined") {
+	applyToDocument(currentMode);
+
 	window
 		.matchMedia("(prefers-color-scheme: dark)")
 		.addEventListener("change", () => {
