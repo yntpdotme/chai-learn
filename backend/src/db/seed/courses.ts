@@ -9,7 +9,7 @@ export async function seedCourses() {
 				title: "Networking for DevOps",
 				slug: "networking-for-devops",
 				description:
-					"Foundational networking concepts for DevOps engineers, from OSI basics to applied AWS VPC networking.",
+					"Foundational networking concepts for DevOps engineers, from OSI-model basics and subnetting to applied AWS VPC design, routing, and security groups.",
 			},
 			{
 				title: "Linux for DevOps",
