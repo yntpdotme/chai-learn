@@ -1,4 +1,6 @@
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.SSR
+	? process.env.API_URL || "http://localhost:3000"
+	: import.meta.env.VITE_API_URL || "";
 
 export class ApiError extends Error {
 	status: number;
