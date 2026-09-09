@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: pnpm
+          cache-dependency-path: |
+            backend/pnpm-lock.yaml
+            frontend/pnpm-lock.yaml
+
+      # ---------- Backend ----------
+      - name: Install backend dependencies
+        run: pnpm install --frozen-lockfile
+        working-directory: ./backend
+
+      - name: Backend — lint & format
+        run: pnpm check
+        working-directory: ./backend
+
+      - name: Backend — typecheck
+        run: pnpm typecheck
+        working-directory: ./backend
+
+      # ---------- Frontend ----------
+      - name: Install frontend dependencies
+        run: pnpm install --frozen-lockfile
+        working-directory: ./frontend
+
+      - name: Frontend — lint & format
+        run: pnpm check
+        working-directory: ./frontend
+
+      - name: Frontend — build
+        run: pnpm build
+        working-directory: ./frontend
+        env:
+          # VITE_ vars are baked into the client bundle at build time.
+          # This step only proves the frontend compiles — the bundle that
+          # actually ships is rebuilt on the server during CD. Set a repo
+          # variable named VITE_API_URL to build against the real API here.
+          VITE_API_URL: ${{ vars.VITE_API_URL || 'https://api.example.com' }}
