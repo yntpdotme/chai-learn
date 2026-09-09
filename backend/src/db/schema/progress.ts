@@ -22,8 +22,8 @@ export const progress = pgTable(
 	}),
 );
 
+// userId is taken from the session, never the request body.
 export const upsertProgressSchema = z.object({
-	userId: z.string().uuid(),
 	lessonId: z.string().uuid(),
 	completed: z.boolean(),
 });

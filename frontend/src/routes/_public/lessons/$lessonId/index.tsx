@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { CheckCircle2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "#/components/ui/button";
-import { api } from "#/lib/api";
+import { ApiError, api } from "#/lib/api";
 
 export const Route = createFileRoute("/_public/lessons/$lessonId/")({
 	loader: ({ params }) => api.lessons.get(params.lessonId),
@@ -13,15 +13,23 @@ function LessonPage() {
 	const lesson = Route.useLoaderData();
 	const [completed, setCompleted] = useState(false);
 	const [saving, setSaving] = useState(false);
+	const [error, setError] = useState<string | null>(null);
 
 	async function markComplete() {
 		setSaving(true);
+		setError(null);
 		try {
 			const result = await api.progress.upsert({
 				lessonId: lesson.id,
 				completed: true,
 			});
 			setCompleted(result.completed);
+		} catch (err) {
+			setError(
+				err instanceof ApiError && err.status === 401
+					? "Sign in to track your progress."
+					: "Couldn't save progress. Please try again.",
+			);
 		} finally {
 			setSaving(false);
 		}
@@ -42,6 +50,8 @@ function LessonPage() {
 				<CheckCircle2 className="mr-1.5 size-4" />
 				{completed ? "Completed" : saving ? "Saving…" : "Mark complete"}
 			</Button>
+
+			{error && <p className="mt-3 text-sm text-destructive">{error}</p>}
 		</main>
 	);
 }
