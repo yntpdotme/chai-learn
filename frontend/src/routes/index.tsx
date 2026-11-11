@@ -13,7 +13,7 @@ function HomePage() {
 				Welcome to Chai aur DevOps
 			</p>
 			<h1 className="mt-4 max-w-2xl text-4xl font-medium sm:text-6xl">
-				Hands On DevOps.
+				Hands On DevOps by Priyanshu Saha.
 			</h1>
 			<p className="mt-4 max-w-md text-muted-foreground">
 				Structured courses, hands-on lessons, and a clear path from zero to
